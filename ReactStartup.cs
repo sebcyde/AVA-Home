@@ -4,9 +4,13 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Runtime.InteropServices;
 
 public class ReactFunctions
 {
+
+    [DllImport("kernel32.dll")]
+    private static extern bool FreeConsole();
     public static void CreateReactApp()
     {
 
@@ -120,6 +124,8 @@ public class ReactFunctions
         string appDirectory = Path.Combine(appLocation, projectName);
         Directory.SetCurrentDirectory(appDirectory);
 
+
+        Console.WriteLine("Installing default packages...");
         // Run 'npm install'
         ProcessStartInfo npmInstallStartInfo = new ProcessStartInfo
         {
@@ -162,36 +168,40 @@ public class ReactFunctions
         if (npmInstallProcess.ExitCode == 0)
         {
             Console.WriteLine($"I have finished installing the default packages for {projectName}.");
-            Console.WriteLine("I'm going to install your preferred packages now.");
-            Console.WriteLine("Starting Multithread mode.");
+            
 
-            string currentDirectory = Directory.GetCurrentDirectory();
-            Console.WriteLine(currentDirectory);
-
-            string[] packagesOne = { "axios", "react-router-dom", "react-redux" };
-            Task[] tasksOne = new Task[3];
-
-            //string[] packagesTwo = { "firebase", "sass", "dotenv" };
-
-            // Start a task for each package installation
-            for (int i = 0; i < tasksOne.Length; i++)
+            string EMode = "";
+            while (string.IsNullOrEmpty(EMode))
             {
-                string packageName = packagesOne[i];
-                tasksOne[i] = Task.Run(() => installPackage(packageName));
+            Console.WriteLine("Shall I also start entertainment mode?");
+                EMode = Console.ReadLine();
             }
 
-            // Wait for all tasks to complete
-            Task.WaitAll(tasksOne);
 
-            Console.WriteLine("And we're all done with the installations.");
-            Console.WriteLine("I'll open the project in VS Code now. See ya later.");
+            // Multithread entertainment and packge installs
+            if (EMode.Equals("y") || EMode.Equals("yes"))
+            {
+                Action[] Processes = { 
+                    () => EntertainmentModeClass.EntertainmentMode(), 
+                    () => DefaultPackageInstallers.ReactPackagesInstall()
+                    };
+
+                MultiThreadingClass.MultiThreadFunctions(Processes);
+                
+            } else
+            {
+                DefaultPackageInstallers.ReactPackagesInstall();
+            }
+
+
+            Console.WriteLine("All processes complete");
 
             // Open in Visual Studio Code
             ProcessStartInfo codeStartInfo = new ProcessStartInfo
             {
                 FileName = @"C:\Users\SebCy\AppData\Local\Programs\Microsoft VS Code\Code.exe",
                 Arguments = ".",
-                UseShellExecute = false,
+                UseShellExecute = true,
                 CreateNoWindow = true
             };
 
@@ -201,9 +211,9 @@ public class ReactFunctions
             };
 
             codeProcess.Start();
-            codeProcess.WaitForExit();
-            // DetachProcessOnWindows(codeProcess);
-            // CloseTerminalOnWindows();
+            Console.WriteLine("All done. Feel free to close this console.");
+            FreeConsole();
+
         }
         else
         {
@@ -211,118 +221,5 @@ public class ReactFunctions
             Console.WriteLine("I'm afraid you'll have to take it from here. Happy coding.");
         }
     }
-
-    public static void installPackage(string packageName)
-    {
-
-        // Run 'npm install'
-        ProcessStartInfo packageInstallation = new ProcessStartInfo
-        {
-            FileName = @"C:\Program Files\nodejs\npm.cmd",
-            Arguments = $"install {packageName}",
-            RedirectStandardInput = true,
-            RedirectStandardOutput = true,
-            RedirectStandardError = true,
-            UseShellExecute = false,
-            CreateNoWindow = true
-        };
-
-        Process packageInstallProcess = new Process
-        {
-            StartInfo = packageInstallation
-        };
-
-        packageInstallProcess.OutputDataReceived += (sender, e) =>
-        {
-            if (!string.IsNullOrEmpty(e.Data))
-            {
-                Console.WriteLine(e.Data);
-            }
-        };
-
-        packageInstallProcess.ErrorDataReceived += (sender, e) =>
-        {
-            if (!string.IsNullOrEmpty(e.Data))
-            {
-                Console.WriteLine(e.Data);
-            }
-        };
-
-        packageInstallProcess.Start();
-        packageInstallProcess.BeginOutputReadLine();
-        packageInstallProcess.BeginErrorReadLine();
-        packageInstallProcess.StandardInput.WriteLine("y");
-        packageInstallProcess.WaitForExit();
-
-        if (packageInstallProcess.ExitCode == 0)
-        {
-            Console.WriteLine($"I have finished installing {packageName}.");
-        }
-        else
-        {
-            Console.WriteLine($"Oops. I ran into an error installing {packageName}.");
-            Console.WriteLine("I'm afraid you'll have to take it from here. Happy coding.");
-        }
-    }
-
-    private static void DetachProcessOnWindows(Process process)
-    {
-        try
-        {
-            // Use Windows-specific code to detach process
-            if (process.StartInfo.UseShellExecute)
-            {
-                Console.WriteLine("Detaching processes.");
-                Process.Start("taskkill", $"/PID {process.Id}");
-            }
-            else
-            {
-                // Obtain the underlying process handle
-                IntPtr processHandle = process.SafeHandle.DangerousGetHandle();
-
-                // Detach the process from the console
-                NativeMethods.FreeConsole();
-
-                // Attach the process to a new console
-                NativeMethods.AttachConsole(ATTACH_PARENT_PROCESS);
-
-                // Close the original process handle
-                NativeMethods.CloseHandle(processHandle);
-            }
-        }
-        catch (Exception ex)
-        {
-            // Handle any exceptions
-            Console.WriteLine("Failed to detach process on Windows: " + ex.Message);
-        }
-    }
-
-    private static void CloseTerminalOnWindows()
-    {
-        try
-        {
-            // Use Windows-specific code to close the terminal
-            Process.Start("taskkill", $"/PID {Process.GetCurrentProcess().Id}");
-        }
-        catch (Exception ex)
-        {
-            // Handle any exceptions
-            Console.WriteLine("Failed to close terminal on Windows: " + ex.Message);
-        }
-    }
-
-    private static class NativeMethods
-    {
-        [System.Runtime.InteropServices.DllImport("kernel32.dll")]
-        public static extern bool AttachConsole(uint dwProcessId);
-
-        [System.Runtime.InteropServices.DllImport("kernel32.dll")]
-        public static extern bool FreeConsole();
-
-        [System.Runtime.InteropServices.DllImport("kernel32.dll")]
-        public static extern bool CloseHandle(IntPtr hObject);
-    }
-
-    private const uint ATTACH_PARENT_PROCESS = 0xFFFFFFFF;
 
 }

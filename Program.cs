@@ -6,13 +6,10 @@ namespace AVA
 {
     class Program
     {
-        
+
         static void Main(string[] args)
         {
 
-
-            while (true)
-            {
                 Console.WriteLine("Hello Sebastian.");
                 Console.WriteLine("Are we coding?");
 
@@ -99,15 +96,17 @@ namespace AVA
                     }
 
 
-
-                } else
+                }
+                else
                 {
                     Console.WriteLine("Thats a shame.");
                     Console.WriteLine("Call me again when you need me.");
+                   
+
                 }
 
             }
 
-        }
+
     }
 }
