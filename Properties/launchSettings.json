@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "AVA": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "OPENAI_API_KEY": "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"
+      }
+    }
+  }
+}

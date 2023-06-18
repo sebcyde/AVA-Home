@@ -116,7 +116,7 @@ public class ReactFunctions
 
     }
 
-    public static void initialiseNewApp(string appLocation, string projectName)
+    private static void initialiseNewApp(string appLocation, string projectName)
     {
         Console.WriteLine("Changing directories.");
 

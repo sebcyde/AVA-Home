@@ -34,7 +34,13 @@ public class DefaultPackageInstallers
     {
         Console.WriteLine("I'm installing your preferred packages now.");
 
-        string[] packagesOne = { "axios", "react-redux", "firebase", "sass", "dotenv" };
+        string[] packagesOne = { 
+            "axios", 
+            "react-redux", 
+            "firebase", 
+            "sass", 
+            "dotenv" 
+        };
 
         for (int i = 0; i < packagesOne.Length; i++)
         {
