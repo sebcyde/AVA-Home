@@ -51,6 +51,7 @@ public class avaSettings
                 chat.AppendUserInput("thats all, thanks for your help");
             }
 
+            // Open this project in Visual Studio
             if (userInput.ToLower() == "open your settings" || userInput.ToLower() == "show me your settings")
             {
                 isStopped = true;
@@ -59,7 +60,33 @@ public class avaSettings
                 openAVASettings();
             }
 
-            chat.AppendUserInput(userInput);
+            // Spin up a custom React App with optional Typescript
+            if (userInput.ToLower() == "create a new react app" || userInput.ToLower() == "create react app")
+            {
+                isStopped = true;
+                isRunning = false;
+                chat.AppendUserInput("Wish me luck on the new React app I'm about to make.");
+                ReactFunctions.CreateReactApp(); ;
+            }
+
+            // Spin up a custom C# App
+            if (userInput.ToLower() == "create a new c# app" || userInput.ToLower() == "create c# app"){
+                isStopped = true;
+                isRunning = false;
+                chat.AppendUserInput("Wish me luck on the new C# app I'm about to make.");
+                CSharpFunctions.CreateNewApp();
+            }
+
+            // Start entertainment mode without any codeing stuff
+            if (userInput.ToLower() == "start entertainment mode")
+            {
+                isStopped = true;
+                isRunning = false;
+                chat.AppendUserInput("I'm going to listen to music for a bit, I'll talk to you later.");
+                //BashCommands.ExecuteBashCommand("printf \"\\033[3;7;10t\"");
+                EntertainmentModeClass.EntertainmentMode();
+            }
+
             Console.WriteLine(" ");
             Console.Write("AVA: ");
             await foreach (var response in chat.StreamResponseEnumerableFromChatbotAsync())

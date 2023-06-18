@@ -14,15 +14,17 @@ public class ReactFunctions
     public static void CreateReactApp()
     {
 
-        Console.WriteLine("And the project name?");
+        Console.WriteLine(" ");
+        Console.WriteLine("AVA: And the project name?");
         string projectName = Console.ReadLine();
 
-        Console.WriteLine("And I assume we're using typescript?");
+        Console.WriteLine(" ");
+        Console.WriteLine("AVA: Should we use typescript?");
         string useTS = Console.ReadLine();
 
         Boolean typescript;
 
-        if (useTS.Equals("y", StringComparison.OrdinalIgnoreCase)) 
+        if (useTS.ToLower() == "y" || useTS.ToLower() == "yes") 
         {
             typescript = true;
         } else {
@@ -33,6 +35,8 @@ public class ReactFunctions
         if (typescript)
         {
             // Implementation for creating a TS React app
+            Console.WriteLine(" ");
+            Console.Write("AVA: ");
             Console.WriteLine("Perfect. give me a second.");
             Console.WriteLine("Creating a new TS React instance.");
             Console.WriteLine($"creating {projectName}.");
@@ -212,7 +216,7 @@ public class ReactFunctions
 
             codeProcess.Start();
             Console.WriteLine("All done. Feel free to close this console.");
-            FreeConsole();
+            //FreeConsole();
 
         }
         else

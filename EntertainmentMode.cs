@@ -9,7 +9,6 @@ public class EntertainmentModeClass
 {
     public static void EntertainmentMode() 
     {
-        Console.WriteLine("Starting entertainment mode. Please wait.");
 
         string[] urls = { 
             "https://www.youtube.com/watch?v=vPotMYbl8IQ&list=PL8nIz55PGxa9bC5IeYljCB7jZ9iK7Bv_k&index=1",
