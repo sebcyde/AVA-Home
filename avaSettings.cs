@@ -1,4 +1,5 @@
-﻿using OpenAI_API;
+﻿using AVA;
+using OpenAI_API;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -18,10 +19,10 @@ public class avaSettings
 
     public static async Task startAVA()
     {
-        
-        string OpenAIAPIKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
 
-        OpenAIAPI api = new OpenAIAPI(new APIAuthentication(OpenAIAPIKey));
+        string API_KEY = API_KEYS.OpenAI_API_KEY;
+
+        OpenAIAPI api = new OpenAIAPI(new APIAuthentication(API_KEY));
         var chat = api.Chat.CreateConversation();
         chat.AppendSystemMessage("You are a female AI personal assistant named 'AVA' that helps the user, 'Sebastian' with various tasks on his computer, similar to Jarvis from Iron Man. Speak like a cool anime girl.");
         
