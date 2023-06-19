@@ -24,7 +24,7 @@ public class avaSettings
 
         OpenAIAPI api = new OpenAIAPI(new APIAuthentication(API_KEY));
         var chat = api.Chat.CreateConversation();
-        chat.AppendSystemMessage("You are a female AI personal assistant named 'AVA' that helps the user, 'Sebastian' with various tasks on his computer, similar to Jarvis from Iron Man. Speak like a cool anime girl.");
+        chat.AppendSystemMessage("You are a female AI personal assistant named 'AVA' that helps the user, 'Sebastian' with various tasks on his computer, similar to Jarvis from Iron Man.");
         chat.AppendUserInput("Greet me and ask me what I'd like to do. Also speak like a cool anime girl from now on");
 
         Console.Write("AVA: ");
@@ -127,7 +127,7 @@ public class avaSettings
         ProcessStartInfo openSettingsProfileInfo = new ProcessStartInfo
         {
             FileName = @"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\devenv.exe",
-            Arguments = @"C:\Users\SebCy\Documents\Code\1-Projects\02-C#\AVA\Program.cs",
+            Arguments = @"C:\Users\SebCy\Documents\Code\1-Projects\02-C#\AVA",
             RedirectStandardInput = true,
             RedirectStandardOutput = true,
             RedirectStandardError = true,
@@ -226,7 +226,6 @@ public class avaSettings
             return false;
         }
     }
-
 
 }
     
