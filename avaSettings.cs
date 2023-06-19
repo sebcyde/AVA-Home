@@ -40,43 +40,38 @@ public class avaSettings
 
             string userInput = Console.ReadLine();
 
-            // Check if the user wants to stop AVA
             if (isCancellingAVA(userInput))
             {
                 beginAVAShutdown();
                 chat.AppendUserInput("thats all, thanks for your help");
-            }
-
-            // Open this project in Visual Studio
-            if (isOpeningSettings(userInput))
+            } 
+            else if (isOpeningSettings(userInput))
             {
                 beginAVAShutdown();
                 chat.AppendUserInput("pretend you're about to open you settings for me to edit");
                 openAVASettings();
-            }
-
-            // Spin up a custom React App with optional Typescript
-            if (isCreatingReactApp(userInput))
+            } 
+            else if (isCreatingReactApp(userInput))
             {
                 beginAVAShutdown();
                 chat.AppendUserInput("Wish me luck on the new React app I'm about to make.");
                 ReactFunctions.CreateReactApp(); ;
-            }
-
-            // Spin up a custom C# App
-            if (isCreatingCApp(userInput))
+            } 
+            else if (isCreatingCApp(userInput))
             {
                 beginAVAShutdown();
                 chat.AppendUserInput("Wish me luck on the new C# app I'm about to make.");
                 CSharpFunctions.CreateNewApp();
-            }
-
-            // Start entertainment mode without any codeing stuff
-            if (isStartingEntertainmentMode(userInput))
+            } 
+            else if (isStartingEntertainmentMode(userInput))
             {
                 beginAVAShutdown();
                 chat.AppendUserInput("I'm going to listen to music for a bit, I'll talk to you later.");
                 EntertainmentModeClass.EntertainmentMode();
+            } 
+            else
+            {
+                chat.AppendUserInput(userInput);
             }
 
             introduceAVA();
