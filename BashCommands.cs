@@ -106,13 +106,7 @@ public class BashCommands
             NewDirectoryName = Console.ReadLine();
         }
 
-        Console.WriteLine(currentDirectory);
-
-        Console.WriteLine(NewDirectoryName);
-
         string path = Path.Combine(currentDirectory, NewDirectoryName);
-
-        Console.WriteLine(path);
 
         Directory.CreateDirectory(path);
 
