@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 public class BashCommands
 {
@@ -71,7 +72,7 @@ public class BashCommands
 
         ProcessStartInfo processInfo = new ProcessStartInfo
         {
-            FileName = "git",
+            FileName = "bash.exe",
             Arguments = $"-c \"cd '{directoryPath}'\"",
             UseShellExecute = false,
             RedirectStandardOutput = true,
@@ -86,6 +87,36 @@ public class BashCommands
         process.Start();
         process.WaitForExit();
 
-        return location;
+        return directoryPath;
     }
+
+    public static string MakeDirectory(string currentDirectory)
+    {
+        string NewDirectoryName = "";
+
+        while (NewDirectoryName.Equals(""))
+        {
+            Console.WriteLine("");
+            Console.Write("AVA: ");
+            Console.Write("What shall I call the new directory?");
+
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.Write("You: ");
+            NewDirectoryName = Console.ReadLine();
+        }
+
+        Console.WriteLine(currentDirectory);
+
+        Console.WriteLine(NewDirectoryName);
+
+        string path = Path.Combine(currentDirectory, NewDirectoryName);
+
+        Console.WriteLine(path);
+
+        Directory.CreateDirectory(path);
+
+        return NewDirectoryName;
+    }
+
 }

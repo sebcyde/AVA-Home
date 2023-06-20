@@ -1,6 +1,7 @@
 ﻿using AVA;
 using OpenAI_API;
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -16,6 +17,7 @@ public class avaSettings
 
     private static bool isRunning = true;
     private static bool isStopped = false;
+    public static string CurrentLocation = Directory.GetCurrentDirectory();
 
     public static async Task startAVA()
     {
@@ -71,9 +73,16 @@ public class avaSettings
             } 
             else if (isChangingDirectory(userInput))
             {
-                string location = BashCommands.ChangeDirectory();
-                chat.AppendUserInput($"Pretend we've just changed directories to the {location} folder.");
+                CurrentLocation = BashCommands.ChangeDirectory();
+                chat.AppendUserInput($"Pretend we're now in the {CurrentLocation} directory.");
   
+            }
+            else if (isCreatingDirectory(userInput))
+            {
+                Console.WriteLine(CurrentLocation);
+                string NewDirectoryName = BashCommands.MakeDirectory(CurrentLocation);
+                chat.AppendUserInput($"Pretend you've just made a new directory named {NewDirectoryName}");
+
             }
             else
             {
@@ -155,25 +164,32 @@ public class avaSettings
         return false;
     }
 
+    private static bool isCreatingDirectory(string input)
+    {
+
+        switch (input.ToLower())
+        {
+            case "create directory":
+            case "create a new directory":
+            case "make directory":
+            case "make a new directory":
+                return true;
+            default:
+                return false;
+        }
+    }
+
     private static bool isOpeningSettings(string input)
     {
         switch (input.ToLower())
         {
             case ("open your settings"):
-                return true;
-                break;
             case ("show me your settings"):
-                return true;
-                break;
             case ("open your code"):
-                return true;
-                break;
             case ("show me your code"):
                 return true;
-                break;
             default:
                 return false;
-                break;
         }
     }
 
@@ -183,11 +199,8 @@ public class avaSettings
         switch (input.ToLower())
         {
             case ("create a new react app"):
-                return true;
-                break;
             case ("create react app"):
                 return true;
-                break;
             default:
                 return false;
         }
@@ -200,11 +213,8 @@ public class avaSettings
         switch (input.ToLower())
         {
             case ("create a new c# app"):
-                return true;
-                break;
             case ("create c# app"):
                 return true;
-                break;
             default:
                 return false;
         }
@@ -217,11 +227,8 @@ public class avaSettings
         switch (input.ToLower())
         {
             case ("start entertainment mode"):
-                return true;
-                break;
             case ("entertainment mode"):
                 return true;
-                break;
             default:
                 return false;
         }
