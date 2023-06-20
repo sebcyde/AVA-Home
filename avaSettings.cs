@@ -55,7 +55,7 @@ public class avaSettings
             {
                 beginAVAShutdown();
                 chat.AppendUserInput("Wish me luck on the new React app I'm about to make.");
-                ReactFunctions.CreateReactApp(); ;
+                ReactFunctions.CreateReactApp(); 
             } 
             else if (isCreatingCApp(userInput))
             {
@@ -69,6 +69,12 @@ public class avaSettings
                 chat.AppendUserInput("I'm going to listen to music for a bit, I'll talk to you later.");
                 EntertainmentModeClass.EntertainmentMode();
             } 
+            else if (isChangingDirectory(userInput))
+            {
+                string location = BashCommands.ChangeDirectory();
+                chat.AppendUserInput($"Pretend we've just changed directories to the {location} folder.");
+  
+            }
             else
             {
                 chat.AppendUserInput(userInput);
@@ -139,6 +145,16 @@ public class avaSettings
 
     }
 
+    private static bool isChangingDirectory(string input)
+    {
+
+        if (input.ToLower() == "move")
+        {
+            return true;
+        }
+        return false;
+    }
+
     private static bool isOpeningSettings(string input)
     {
         switch (input.ToLower())
@@ -157,6 +173,7 @@ public class avaSettings
                 break;
             default:
                 return false;
+                break;
         }
     }
 

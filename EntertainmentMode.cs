@@ -10,10 +10,12 @@ public class EntertainmentModeClass
     public static void EntertainmentMode() 
     {
 
-        string[] urls = { 
-            "https://www.youtube.com/watch?v=vPotMYbl8IQ&list=PL8nIz55PGxa9bC5IeYljCB7jZ9iK7Bv_k&index=1",
+        string[] urls = {
+            "https://github.com/sebcyde",
+            "https://www.youtube.com/watch?v=w1WnLPmu-7s&list=PL8nIz55PGxa9bC5IeYljCB7jZ9iK7Bv_k",
             "https://firebase.google.com/",
-            "https://chat.openai.com/"
+            "https://chat.openai.com/",
+            
         };
 
         StartGoogleChrome(urls);
@@ -28,7 +30,7 @@ public class EntertainmentModeClass
         }
         catch (Exception ex)
         {
-            Console.WriteLine("Failed to start Google Chrome: " + ex.Message);
+            Console.WriteLine("Failed to start Chrome: " + ex.Message);
         }
     }
 }
