@@ -15,6 +15,7 @@ public class avaSettings
     [DllImport("kernel32.dll")]
     private static extern bool FreeConsole();
 
+    public static string ErrorLog = ""; 
     private static bool isRunning = true;
     private static bool isStopped = false;
     public static string CurrentLocation = Directory.GetCurrentDirectory();
@@ -29,6 +30,7 @@ public class avaSettings
         chat.AppendSystemMessage("You are a female AI personal assistant named 'AVA' that helps the user, 'Sebastian' with various tasks on his computer, similar to Jarvis from Iron Man.");
         chat.AppendUserInput("Greet me and ask me what I'd like to do. Also speak like a cool anime girl from now on");
 
+        Console.WriteLine(" ");
         Console.Write("AVA: ");
         await foreach (var response in chat.StreamResponseEnumerableFromChatbotAsync())
         {
@@ -73,16 +75,26 @@ public class avaSettings
             } 
             else if (isChangingDirectory(userInput))
             {
-                CurrentLocation = BashCommands.ChangeDirectory();
+                CurrentLocation = await BashCommands.ChangeDirectory();
                 chat.AppendUserInput($"Pretend we're now in the {CurrentLocation} directory.");
   
             }
             else if (isCreatingDirectory(userInput))
             {
-                Console.WriteLine(CurrentLocation);
-                string NewDirectoryName = BashCommands.MakeDirectory(CurrentLocation);
+                string NewDirectoryName = await BashCommands.MakeDirectory(CurrentLocation);
                 chat.AppendUserInput($"Pretend you've just made a new directory named {NewDirectoryName}");
-
+            }
+            else if (isRefreshingJikanData(userInput))
+            {
+                bool UpdatedData = await DataOrganisation.RefreshJikanData();
+                if (UpdatedData)
+                {
+                chat.AppendUserInput("Pretend you've just re downloaded, parsed, cleaned and ordered a pile of data relating to anime and updated the database with the new data.");
+                } else
+                {
+                    Console.WriteLine(ErrorLog);
+                    chat.AppendUserInput($"Pretend you ran into a bug while you were updating the database and I'll have to take a look at it. The error log from your attempt is: {ErrorLog}.");
+                }
             }
             else
             {
@@ -233,6 +245,22 @@ public class avaSettings
                 return false;
         }
 
+    }
+
+    private static bool isRefreshingJikanData(string input)
+    {
+        switch (input.ToLower())
+        {
+            case ("refresh jikan"):
+            case ("restart jikan"):
+            case ("redo jikan"):
+            case ("refresh anime data"):
+            case ("refresh jikan data"):
+            case ("refresh jikan anime"):
+                return true;
+            default:
+                return false;
+        }
     }
 
     private static bool isCancellingAVA(string input)

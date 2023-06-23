@@ -8,13 +8,24 @@ using System.IO;
 
 public class BashCommands
 {
-    public static void ExecuteBashCommand(string command)
+    public static async Task<string> ExecuteBashCommandAsync(string command)
     {
+
+        Console.WriteLine(" ");
+        Console.WriteLine($"Initialised Command: {command}.");
+        Console.WriteLine(" ");
+        Console.WriteLine($"Current Directory: {Directory.GetCurrentDirectory()}");
+        Console.WriteLine(" ");
+
         ProcessStartInfo startInfo = new ProcessStartInfo
         {
             FileName = "bash.exe",
             Arguments = $"-c \"{command}\"",
-            UseShellExecute = false
+            UseShellExecute = false,
+            RedirectStandardInput = true,
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            CreateNoWindow = true
         };
 
         Process process = new Process
@@ -22,26 +33,46 @@ public class BashCommands
             StartInfo = startInfo
         };
 
+        // Set up event handlers for capturing output
+        StringBuilder outputBuilder = new StringBuilder();
+
+        process.OutputDataReceived += (sender, e) =>
+        {
+            if (!string.IsNullOrEmpty(e.Data))
+            {
+                Console.WriteLine(e.Data);
+                outputBuilder.AppendLine(e.Data);
+                // Output the log to the console in real-time
+            }
+        };
+
         process.Start();
+        process.BeginOutputReadLine();
         process.WaitForExit();
+
+
+        return outputBuilder.ToString();
     }
 
-    public static string ChangeDirectory()
+    public static async Task<string> ChangeDirectory(string location = "")
     {
-        string location = "";
+
         string directoryPath = "";
 
-        while (location.Equals(""))
-        {
-            Console.WriteLine("");
-            Console.Write("AVA: ");
-            Console.Write("Where are we going?");
+        if (location.Equals("")) {
+            while (location.Equals(""))
+            {
+                Console.WriteLine("");
+                Console.Write("AVA: ");
+                Console.Write("Where are we going?");
 
-            Console.WriteLine("");
-            Console.WriteLine("");
-            Console.Write("You: ");
-            location = Console.ReadLine();
+                Console.WriteLine("");
+                Console.WriteLine("");
+                Console.Write("You: ");
+                location = Console.ReadLine();
+            }
         }
+
 
         switch (location.ToLower())
         {
@@ -67,30 +98,20 @@ public class BashCommands
                 directoryPath = @"C:\Users\SebCy\Documents\Code\1-Projects\07-Java";
                 break;
             default:
+                directoryPath = location;
                 break;
         }
 
-        ProcessStartInfo processInfo = new ProcessStartInfo
-        {
-            FileName = "bash.exe",
-            Arguments = $"-c \"cd '{directoryPath}'\"",
-            UseShellExecute = false,
-            RedirectStandardOutput = true,
-            CreateNoWindow = true
-        };
+        Directory.SetCurrentDirectory(directoryPath);
+        await Task.Delay(1000);
 
-        Process process = new Process
-        {
-            StartInfo = processInfo
-        };
+        Console.WriteLine(" ");
 
-        process.Start();
-        process.WaitForExit();
 
         return directoryPath;
     }
 
-    public static string MakeDirectory(string currentDirectory)
+    public static async Task<string> MakeDirectory(string currentDirectory)
     {
         string NewDirectoryName = "";
 
